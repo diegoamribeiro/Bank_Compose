@@ -46,7 +46,7 @@ import com.dmribeiro87.bankcompose.data.Currency
 import com.dmribeiro87.bankcompose.ui.theme.GreenEnd
 import com.dmribeiro87.bankcompose.ui.theme.GreenStart
 
-val listCurrencies = listOf(
+val currencies = listOf(
     Currency(
         name = "USD",
         buy = 23.35f,
@@ -90,7 +90,7 @@ val listCurrencies = listOf(
 @Composable
 fun CurrencySection() {
     var isVisible by remember {
-        mutableStateOf(true)
+        mutableStateOf(false)
     }
     var iconState by remember {
         mutableStateOf(Icons.Rounded.KeyboardArrowUp)
@@ -111,24 +111,23 @@ fun CurrencySection() {
         ) {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
                     .padding(16.dp)
-                    .animateContentSize(),
+                    .animateContentSize()
+                    .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.secondary)
-                        .clickable {
-                            isVisible = !isVisible
-                            iconState = if (isVisible) {
-                                Icons.Rounded.KeyboardArrowDown
-                            } else {
-                                Icons.Rounded.KeyboardArrowUp
-                            }
+            )  {
+                Box(modifier = Modifier
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.secondary)
+                    .clickable {
+                        isVisible = !isVisible
+                        iconState = if (isVisible) {
+                            Icons.Rounded.KeyboardArrowUp
+                        } else {
+                            Icons.Rounded.KeyboardArrowDown
                         }
-                ) {
+                    }
+                )  {
                     Icon(
                         modifier = Modifier.size(25.dp),
                         imageVector = iconState,
@@ -155,7 +154,7 @@ fun CurrencySection() {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(horizontal = 16.dp)
-                        .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+                        .clip(RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp))
                         .background(MaterialTheme.colorScheme.background)
                 ) {
                     val boxWithConstraints = this
@@ -164,7 +163,7 @@ fun CurrencySection() {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp)
+                            .padding(horizontal = 16.dp)
                     ) {
                         Spacer(modifier = Modifier.height(16.dp))
                         Row(
@@ -176,8 +175,7 @@ fun CurrencySection() {
                                 modifier = Modifier.width(width),
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 16.sp,
-                                color = MaterialTheme.colorScheme.onBackground,
-                                textAlign = TextAlign.End
+                                color = MaterialTheme.colorScheme.onBackground
                             )
                             Text(
                                 text = "Buy",
@@ -198,7 +196,7 @@ fun CurrencySection() {
                         }
                         Spacer(modifier = Modifier.height(16.dp))
                         LazyColumn {
-                            items(listCurrencies.size) { index ->
+                            items(currencies.size) { index ->
                                 CurrencyItem(
                                     index = index,
                                     width = width
@@ -217,7 +215,7 @@ fun CurrencyItem(
     index: Int,
     width: Dp
 ){
-    val currency = listCurrencies[index]
+    val currency = currencies[index]
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -226,29 +224,38 @@ fun CurrencyItem(
 
     ) {
 
-        Box(
-            modifier = Modifier
-                .clip(RoundedCornerShape(8.dp))
-                .background(GreenEnd)
-                .padding(4.dp)
-        ){
-            Icon(
-                modifier = Modifier.size(18.dp),
-                imageVector = currency.icon,
-                contentDescription = currency.name,
-                tint = Color.White
+        Row(
+            modifier = Modifier.width(width),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(GreenEnd)
+                    .padding(4.dp)
+            ) {
+                Icon(
+                    modifier = Modifier.size(18.dp),
+                    imageVector = currency.icon,
+                    contentDescription = currency.name,
+                    tint = Color.White
+                )
+            }
+            Text(
+                text = currency.name,
+                modifier = Modifier
+                    .width(width)
+                    .padding(start = 10.dp),
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp,
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
         Text(
-            text = currency.name,
-            modifier = Modifier.width(width).padding(start = 10.dp),
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 18.sp,
-            color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.End
-        )
-        Text(
-            modifier = Modifier.width(width).padding(start = 10.dp),
+            modifier = Modifier
+                .width(width)
+                .padding(start = 10.dp),
             text = "$${currency.buy}",
             fontWeight = FontWeight.SemiBold,
             fontSize = 16.sp,
@@ -256,7 +263,9 @@ fun CurrencyItem(
             textAlign = TextAlign.End
         )
         Text(
-            modifier = Modifier.width(width).padding(start = 10.dp),
+            modifier = Modifier
+                .width(width)
+                .padding(start = 10.dp),
             text = "$${currency.sell}",
             fontWeight = FontWeight.SemiBold,
             fontSize = 16.sp,
