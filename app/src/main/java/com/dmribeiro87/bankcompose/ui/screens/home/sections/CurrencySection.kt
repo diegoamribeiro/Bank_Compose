@@ -154,7 +154,6 @@ fun CurrencySection() {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(horizontal = 16.dp)
-                        .clip(RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp))
                         .background(MaterialTheme.colorScheme.background)
                 ) {
                     val boxWithConstraints = this
